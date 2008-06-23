@@ -1,11 +1,11 @@
 Summary:	Das U-Boot -- the Universal Boot Loader
 Name:		uboot
-Version:	1.3.2
+Version:	1.3.3
 Release:	0.1
 License:	GPL
 Group:		Applications/System
 Source0:	ftp://ftp.denx.de/pub/u-boot/u-boot-%{version}.tar.bz2
-# Source0-md5:	78b1c2722d3907b5fae2cd219dbaf927
+# Source0-md5:	6ee26954bb548ad90392cd329ab5cc4c
 URL:		http://www.denx.de/wiki/UBoot
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -31,17 +31,18 @@ compression method, entry points, time stamp, CRC32 checksums, etc.
 
 %prep
 %setup -q -n u-boot-%{version}
-ln -s ../lib_generic/crc32.c tools
 
 %build
-cd tools
-%{__cc} %{rpmcflags} -DUSE_HOSTCC -c crc32.c -o crc32.o
-%{__cc} %{rpmcflags} -I../include -c mkimage.c -o mkimage.o
-%{__cc} %{rpmldflags} -o mkimage crc32.o mkimage.o
+touch include/config.mk include/config.h
+
+%{__make} tools \
+	HOSTSTRIP=echo \
+	BIN_FILES="bmp_logo gen_eth_addr img2srec mkimage"
 
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_bindir}
+
 install tools/mkimage  $RPM_BUILD_ROOT%{_bindir}
 
 %clean
