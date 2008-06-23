@@ -1,7 +1,7 @@
 Summary:	Das U-Boot -- the Universal Boot Loader
 Name:		uboot
 Version:	1.3.3
-Release:	0.1
+Release:	1
 License:	GPL
 Group:		Applications/System
 Source0:	ftp://ftp.denx.de/pub/u-boot/u-boot-%{version}.tar.bz2
