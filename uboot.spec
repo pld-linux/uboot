@@ -6,7 +6,7 @@ License:	GPL
 Group:		Applications/System
 Source0:	ftp://ftp.denx.de/pub/u-boot/u-boot-%{version}.tar.bz2
 # Source0-md5:	6ee26954bb548ad90392cd329ab5cc4c
-URL:		http://www.denx.de/wiki/UBoot
+URL:		http://www.denx.de/wiki/U-Boot
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
