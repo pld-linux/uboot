@@ -1,11 +1,11 @@
 Summary:	Das U-Boot -- the Universal Boot Loader
 Name:		uboot
-Version:	1.3.3
+Version:	2009.01
 Release:	1
 License:	GPL
 Group:		Applications/System
 Source0:	ftp://ftp.denx.de/pub/u-boot/u-boot-%{version}.tar.bz2
-# Source0-md5:	6ee26954bb548ad90392cd329ab5cc4c
+# Source0-md5:	cb11d3d74eee4d31124523d90d8c31fa
 URL:		http://www.denx.de/wiki/U-Boot
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -37,6 +37,8 @@ touch include/config.mk include/config.h
 
 %{__make} tools \
 	HOSTSTRIP=echo \
+	HOST_CFLAGS="%{rpmcflags}" \
+	HOST_LDFLAGS="%{rpmldflags}" \
 	BIN_FILES="bmp_logo gen_eth_addr img2srec mkimage"
 
 %install
