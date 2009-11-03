@@ -1,7 +1,7 @@
 Summary:	Das U-Boot -- the Universal Boot Loader
 Name:		uboot
 Version:	2009.01
-Release:	1
+Release:	2
 License:	GPL
 Group:		Applications/System
 Source0:	ftp://ftp.denx.de/pub/u-boot/u-boot-%{version}.tar.bz2
