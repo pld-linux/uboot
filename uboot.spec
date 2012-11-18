@@ -1,12 +1,12 @@
 Summary:	Das U-Boot -- the Universal Boot Loader
 Summary(pl.UTF-8):	Das U-Boot - uniwersalny bootloader
 Name:		uboot
-Version:	2011.03
+Version:	2012.10
 Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	ftp://ftp.denx.de/pub/u-boot/u-boot-%{version}.tar.bz2
-# Source0-md5:	91d02124c94368557d0e9ac05fb8c33f
+# Source0-md5:	8655f63b1e5c4647295ac9ce44660be3
 URL:		http://www.denx.de/wiki/U-Boot
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -18,7 +18,7 @@ including PPC, ARM, AVR32, MIPS, x86, 68k, Nios, and MicroBlaze.
 %description -l pl.UTF-8
 Das U-Boot (Universal Bootloader lub "łódź podwodna" po niemiecku) to
 bootloader dla wielu różnych architektur komputerów, w tym PPC, ARM,
-AVR32, MIPS, x86, 68k, Nios i MicroBlaze
+AVR32, MIPS, x86, 68k, Nios i MicroBlaze.
 
 %package mkimage
 Summary:	Generate kernel image for U-Boot
