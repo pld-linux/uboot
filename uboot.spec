@@ -1,12 +1,13 @@
 Summary:	Das U-Boot -- the Universal Boot Loader
 Summary(pl.UTF-8):	Das U-Boot - uniwersalny bootloader
 Name:		uboot
-Version:	2014.07
+Version:	2015.04
 Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	ftp://ftp.denx.de/pub/u-boot/u-boot-%{version}.tar.bz2
-# Source0-md5:	36d4bad687edcafa396fee607e505d4e
+# Source0-md5:	570bdc2c47270c2a98ca60ff6c5c74cd
+Source1:	%{name}.config
 URL:		http://www.denx.de/wiki/U-Boot
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -51,6 +52,8 @@ czasie utworzenia, sumach kontrolnych CRC32 itp.
 %prep
 %setup -q -n u-boot-%{version}
 
+cp -p %{SOURCE1} .config
+
 %build
 %{__make} tools-only \
 	HOSTCC="%{__cc}" \
@@ -70,7 +73,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc CREDITS README
+%doc MAINTAINERS README
 
 %files mkimage
 %defattr(644,root,root,755)
