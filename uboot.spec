@@ -1,15 +1,36 @@
 Summary:	Das U-Boot -- the Universal Boot Loader
 Summary(pl.UTF-8):	Das U-Boot - uniwersalny bootloader
 Name:		uboot
-Version:	2015.04
+Version:	2020.10
 Release:	1
 License:	GPL v2
 Group:		Applications/System
-Source0:	ftp://ftp.denx.de/pub/u-boot/u-boot-%{version}.tar.bz2
-# Source0-md5:	570bdc2c47270c2a98ca60ff6c5c74cd
-Source1:	%{name}.config
-URL:		http://www.denx.de/wiki/U-Boot
+Source0:	https://ftp.denx.de/pub/u-boot/u-boot-%{version}.tar.bz2
+# Source0-md5:	14656f08aa73a8dbbde2424fe78bbe3b
+Patch0:		rpi-Enable-using-the-DT-provided-by-the-Raspberry-Pi.patch
+URL:		https://www.denx.de/wiki/U-Boot
+%ifarch aarch64
+BuildRequires:	arm-trusted-firmware-armv8
+%endif
+BuildRequires:	bison
+BuildRequires:	flex
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+%define		common_configs	tools-only
+
+%ifarch %{arm}
+%define		arch_configs	rpi_0_w rpi_2
+%else
+%ifarch aarch64
+%define		arch_configs	pinebook-pro-rk3399
+%endif
+%endif
+
+%define		configs %{common_configs} %{?arch_configs}
+
+%define		rk3399_configs pinebook-pro-rk3399
+
+%define		imagedir	%{_datadir}/uboot
 
 %description
 Das U-Boot (Universal Bootloader, German for "the submarine") is a
@@ -20,6 +41,27 @@ including PPC, ARM, AVR32, MIPS, x86, 68k, Nios, and MicroBlaze.
 Das U-Boot (Universal Bootloader lub "łódź podwodna" po niemiecku) to
 bootloader dla wielu różnych architektur komputerów, w tym PPC, ARM,
 AVR32, MIPS, x86, 68k, Nios i MicroBlaze.
+
+%package image-pinebook-pro
+Summary:	U-Boot firmware images for Pinebook Pro
+Group:		Applications/System
+
+%description image-pinebook-pro
+U-Boot firmware images for Pinebook Pro.
+
+%package image-raspberry-pi-2
+Summary:	U-Boot firmware image for Raspberry Pi 2
+Group:		Applications/System
+
+%description image-raspberry-pi-2
+U-Boot firmware image for Raspberry Pi 2.
+
+%package image-raspberry-pi-zero
+Summary:	U-Boot firmware image for Raspberry Pi Zero
+Group:		Applications/System
+
+%description image-raspberry-pi-zero
+U-Boot firmware image for Raspberry Pi Zero.
 
 %package mkimage
 Summary:	Generate kernel image for U-Boot
@@ -43,30 +85,54 @@ jądra Linuksa "uImage" w nagłówkiem, sumą kontrolną CRC32 itp. do
 wykorzystania przez bootloader U-Boot.
 
 mkimage może być używane także do tworzenia obrazów ramdysków do
-wykorzystania przez U-Boota - osobnych w stosunku do obrazu jądra
-lub połączonych w jeden plik. mkimage obudowuje obrazy w 64-bajtowy
+wykorzystania przez U-Boota - osobnych w stosunku do obrazu jądra lub
+połączonych w jeden plik. mkimage obudowuje obrazy w 64-bajtowy
 nagłówek zawierający informacje o architekturze docelowej, systemie
 operacyjnym, rodzaju obrazu, metodzie kompresji, punktach wejściowych,
 czasie utworzenia, sumach kontrolnych CRC32 itp.
 
 %prep
 %setup -q -n u-boot-%{version}
-
-cp -p %{SOURCE1} .config
+%patch0 -p1
 
 %build
-%{__make} tools-only \
-	HOSTCC="%{__cc}" \
-	HOSTSTRIP=: \
-	HOST_CFLAGS="%{rpmcflags}" \
-	HOST_LDFLAGS="%{rpmldflags}" \
-	BIN_FILES="bmp_logo gen_eth_addr img2srec mkimage"
+for config in %configs; do
+	if echo ' %rk3399_configs ' | grep -q " $config "; then
+		mkdir -p build/$config
+		cp -p /usr/share/arm-trusted-firmware/rk3399/* build/$config
+	fi
+	%{__make} ${config}_defconfig \
+		HOSTCC="%{__cc}" \
+		STRIP=: \
+		HOSTCFLAGS="%{rpmcflags}" \
+		HOSTLDFLAGS="%{rpmldflags}" \
+		V=1 \
+		O=build/$config
+	%{__make} \
+		$(test "$config" = "tools-only" && echo tools-only) \
+		HOSTCC="%{__cc}" \
+		STRIP=: \
+		HOSTCFLAGS="%{rpmcflags}" \
+		HOSTLDFLAGS="%{rpmldflags}" \
+		V=1 \
+		O=build/$config
+done
 
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_bindir}
 
-install tools/mkimage $RPM_BUILD_ROOT%{_bindir}
+for config in %configs; do
+	if [ "$config" = "tools-only" ]; then
+		install build/$config/tools/mkimage $RPM_BUILD_ROOT%{_bindir}
+	elif echo ' %rk3399_configs ' | grep -q " $config "; then
+		install -d $RPM_BUILD_ROOT%{imagedir}/$config
+		cp -p build/$config/{idbloader.img,u-boot.itb} $RPM_BUILD_ROOT%{imagedir}/$config
+	else
+		install -d $RPM_BUILD_ROOT%{imagedir}/$config
+		cp -p build/$config/u-boot.bin $RPM_BUILD_ROOT%{imagedir}/$config
+	fi
+done
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -74,6 +140,22 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc MAINTAINERS README
+
+%ifarch aarch64
+%files image-pinebook-pro
+%defattr(644,root,root,755)
+%{imagedir}/pinebook-pro-rk3399
+%endif
+
+%ifarch %{arm}
+%files image-raspberry-pi-2
+%defattr(644,root,root,755)
+%{imagedir}/rpi_2
+
+%files image-raspberry-pi-zero
+%defattr(644,root,root,755)
+%{imagedir}/rpi_0_w
+%endif
 
 %files mkimage
 %defattr(644,root,root,755)
