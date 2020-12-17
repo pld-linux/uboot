@@ -8,6 +8,7 @@ Group:		Applications/System
 Source0:	https://ftp.denx.de/pub/u-boot/u-boot-%{version}.tar.bz2
 # Source0-md5:	14656f08aa73a8dbbde2424fe78bbe3b
 Patch0:		rpi-Enable-using-the-DT-provided-by-the-Raspberry-Pi.patch
+Patch1:		rk3399-Pinebook-pro-EDP-support.patch
 URL:		https://www.denx.de/wiki/U-Boot
 %ifarch aarch64
 BuildRequires:	arm-trusted-firmware-armv8
@@ -93,7 +94,12 @@ czasie utworzenia, sumach kontrolnych CRC32 itp.
 
 %prep
 %setup -q -n u-boot-%{version}
+%ifarch %{arm} aarch64
 %patch0 -p1
+%endif
+%ifarch aarch64
+%patch1 -p1
+%endif
 
 %build
 for config in %configs; do
