@@ -15,6 +15,7 @@ BuildRequires:	arm-trusted-firmware-armv8
 %endif
 BuildRequires:	bison
 BuildRequires:	flex
+BuildRequires:	openssl-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		common_configs	tools-only
@@ -45,24 +46,36 @@ AVR32, MIPS, x86, 68k, Nios i MicroBlaze.
 
 %package image-pinebook-pro
 Summary:	U-Boot firmware images for Pinebook Pro
+Summary(pl.UTF-8):	Obrazy firmware'u U-Boot dla urządzeń Pinebook Pro
 Group:		Applications/System
 
 %description image-pinebook-pro
 U-Boot firmware images for Pinebook Pro.
 
+%description image-pinebook-pro -l pl.UTF-8
+Obrazy firmware'u U-Boot dla urządzeń Pinebook Pro.
+
 %package image-raspberry-pi-2
 Summary:	U-Boot firmware image for Raspberry Pi 2
+Summary(pl.UTF-8):	Obrazy firmware'u U-Boot dla urządzeń Raspberry Pi 2
 Group:		Applications/System
 
 %description image-raspberry-pi-2
 U-Boot firmware image for Raspberry Pi 2.
 
+%description image-raspberry-pi-2 -l pl.UTF-8
+Obrazy firmware'u U-Boot dla urządzeń Raspberry Pi 2.
+
 %package image-raspberry-pi-zero
 Summary:	U-Boot firmware image for Raspberry Pi Zero
+Summary(pl.UTF-8):	Obrazy firmware'u U-Boot dla urządzeń Raspberry Pi Zero
 Group:		Applications/System
 
 %description image-raspberry-pi-zero
 U-Boot firmware image for Raspberry Pi Zero.
+
+%description image-raspberry-pi-zero -l pl.UTF-8
+Obrazy firmware'u U-Boot dla urządzeń Raspberry Pi Zero.
 
 %package mkimage
 Summary:	Generate kernel image for U-Boot
@@ -126,7 +139,7 @@ done
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{_bindir}
+install -d $RPM_BUILD_ROOT{%{_bindir},%{imagedir}}
 
 for config in %configs; do
 	if [ "$config" = "tools-only" ]; then
