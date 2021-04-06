@@ -1,12 +1,12 @@
 Summary:	Das U-Boot -- the Universal Boot Loader
 Summary(pl.UTF-8):	Das U-Boot - uniwersalny bootloader
 Name:		uboot
-Version:	2021.01
+Version:	2021.04
 Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	https://ftp.denx.de/pub/u-boot/u-boot-%{version}.tar.bz2
-# Source0-md5:	a3206df1c1b97df7a4ddcdd17cb97d0c
+# Source0-md5:	1299c23ee4fde7e73a1b9f8f80fd28e0
 Patch0:		rpi-Enable-using-the-DT-provided-by-the-Raspberry-Pi.patch
 Patch1:		rk3399-Pinebook-pro-EDP-support.patch
 Patch2:		%{name}-pbp_usb_hang.patch

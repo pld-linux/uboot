@@ -165,7 +165,7 @@ Index: u-boot/drivers/video/rockchip/rk_vop.c
 +	}
 +	debug("vop_id=%d\n", vop_id);
  
- 	disp_uc_plat = dev_get_uclass_platdata(disp);
+ 	disp_uc_plat = dev_get_uclass_plat(disp);
  	debug("Found device '%s', disp_uc_priv=%p\n", disp->name, disp_uc_plat);
 
 From patchwork Fri Nov 20 13:24:23 2020
@@ -322,7 +322,7 @@ Index: u-boot/drivers/video/rockchip/rk_edp.c
  	writel(LDO_OUTPUT_V_SEL_145 | KVCO_DEFALUT | CHG_PUMP_CUR_SEL_5US |
  	       V2L_CUR_SEL_1MA, &regs->pll_reg_2);
 @@ -1029,6 +1052,8 @@ static int rk_edp_probe(struct udevice *
- 	struct display_plat *uc_plat = dev_get_uclass_platdata(dev);
+ 	struct display_plat *uc_plat = dev_get_uclass_plat(dev);
  	struct rk_edp_priv *priv = dev_get_priv(dev);
  	struct rk3288_edp *regs = priv->regs;
 +	struct rockchip_dp_data *edp_data = (struct rockchip_dp_data *)dev_get_driver_data(dev);
@@ -1164,7 +1164,7 @@ Index: u-boot/drivers/video/rockchip/rk_vop.c
 +#include <reset.h>
  #include <syscon.h>
  #include <video.h>
- #include <asm/gpio.h>
+ #include <asm/global_data.h>
 @@ -36,14 +38,16 @@ enum vop_pol {
  	DCLK_INVERT    = 3
  };
