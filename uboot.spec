@@ -17,16 +17,19 @@ BuildRequires:	bison
 BuildRequires:	dtc
 BuildRequires:	flex
 BuildRequires:	openssl-devel
+BuildRequires:	rpmbuild(macros) >= 2.007
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		common_configs	tools-only
 
-%ifarch %{arm}
+%ifarch %{armv6}
 %define		arch_configs	rpi_0_w rpi_2
-%else
+%endif
+%ifarch %{armv7}
+%define		arch_configs	rpi_2
+%endif
 %ifarch aarch64
 %define		arch_configs	pinebook-pro-rk3399
-%endif
 %endif
 
 %define		configs %{common_configs} %{?arch_configs}
@@ -170,11 +173,13 @@ rm -rf $RPM_BUILD_ROOT
 %{imagedir}/pinebook-pro-rk3399
 %endif
 
-%ifarch %{arm}
+%ifarch %{armv6} %{armv7}
 %files image-raspberry-pi-2
 %defattr(644,root,root,755)
 %{imagedir}/rpi_2
+%endif
 
+%ifarch %{armv6}
 %files image-raspberry-pi-zero
 %defattr(644,root,root,755)
 %{imagedir}/rpi_0_w
