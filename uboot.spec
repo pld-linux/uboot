@@ -14,6 +14,7 @@ URL:		https://www.denx.de/wiki/U-Boot
 BuildRequires:	arm-trusted-firmware-armv8
 %endif
 BuildRequires:	bison
+BuildRequires:	dtc
 BuildRequires:	flex
 BuildRequires:	openssl-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
