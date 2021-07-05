@@ -122,6 +122,7 @@ for config in %configs; do
 		cp -p /usr/share/arm-trusted-firmware/rk3399/* build/$config
 	fi
 	%{__make} ${config}_defconfig \
+		CC="%{__cc}" \
 		HOSTCC="%{__cc}" \
 		STRIP=: \
 		HOSTCFLAGS="%{rpmcflags}" \
@@ -130,6 +131,7 @@ for config in %configs; do
 		O=build/$config
 	%{__make} \
 		$(test "$config" = "tools-only" && echo tools-only) \
+		CC="%{__cc}" \
 		HOSTCC="%{__cc}" \
 		STRIP=: \
 		HOSTCFLAGS="%{rpmcflags}" \
