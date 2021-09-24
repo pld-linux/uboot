@@ -2,7 +2,7 @@ Summary:	Das U-Boot -- the Universal Boot Loader
 Summary(pl.UTF-8):	Das U-Boot - uniwersalny bootloader
 Name:		uboot
 Version:	2021.07
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Applications/System
 Source0:	https://ftp.denx.de/pub/u-boot/u-boot-%{version}.tar.bz2
