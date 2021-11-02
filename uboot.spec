@@ -9,6 +9,7 @@ Source0:	https://ftp.denx.de/pub/u-boot/u-boot-%{version}.tar.bz2
 # Source0-md5:	f1392080facf59dd2c34096a5fd95d4c
 Patch0:		rpi-Enable-using-the-DT-provided-by-the-Raspberry-Pi.patch
 Patch1:		%{name}-pbp_usb_hang.patch
+Patch2:		rk3399-emmc.patch
 URL:		https://www.denx.de/wiki/U-Boot
 %ifarch aarch64
 BuildRequires:	arm-trusted-firmware-armv8
@@ -116,6 +117,7 @@ czasie utworzenia, sumach kontrolnych CRC32 itp.
 %endif
 %ifarch aarch64
 %patch1 -p1
+%patch2 -p1
 %endif
 
 %build
