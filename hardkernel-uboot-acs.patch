@@ -1,0 +1,11 @@
+--- hardkernel-uboot-odroid/arch/arm/cpu/armv8/g12b/firmware/acs/acs_entry.S.orig	2021-03-29 03:39:35.000000000 +0200
++++ hardkernel-uboot-odroid/arch/arm/cpu/armv8/g12b/firmware/acs/acs_entry.S	2021-11-28 02:02:25.014983869 +0100
+@@ -7,5 +7,5 @@
+ #ifdef CONFIG_MDUMP_COMPRESS
+ 	.word	__ramdump_data
+ #else
+-	.word	0x0
+-#endif
+\ No newline at end of file
++	.quad	0x0
++#endif

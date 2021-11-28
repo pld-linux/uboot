@@ -1,0 +1,21 @@
+--- hardkernel-uboot-odroid/Makefile.orig	2021-03-29 03:39:35.000000000 +0200
++++ hardkernel-uboot-odroid/Makefile	2021-11-21 15:31:27.980593091 +0100
+@@ -589,7 +589,6 @@
+ KBUILD_CPPFLAGS += $(KCPPFLAGS)
+ KBUILD_AFLAGS += $(KAFLAGS)
+ KBUILD_CFLAGS += $(KCFLAGS)
+-KBUILD_CFLAGS += -Werror
+ 
+ # Use UBOOTINCLUDE when you must reference the include/ directory.
+ # Needed to be compatible with the O= option
+--- hardkernel-uboot-odroid/arch/arm/cpu/armv8/g12b/firmware/acs/Makefile.orig	2021-11-21 15:33:42.835979314 +0100
++++ hardkernel-uboot-odroid/arch/arm/cpu/armv8/g12b/firmware/acs/Makefile	2021-11-21 15:33:54.685870737 +0100
+@@ -180,7 +180,7 @@
+ 				-mgeneral-regs-only -D__ASSEMBLY__		\
+ 				${DEFINES} ${INCLUDES}
+ CFLAGS			+= 	-nostdinc -pedantic -ffreestanding -Wall	\
+-				-Werror -mgeneral-regs-only -std=c99 -c -Os	\
++				-mgeneral-regs-only -std=c99 -c -Os	\
+ 				${DEFINES} ${INCLUDES} $(VPATH_LIST:%=-I%)
+ CFLAGS			+=	-ffunction-sections -fdata-sections
+ ASFLAGS			+= 	${FIRMWARE_CPPFLAGS}

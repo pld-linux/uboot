@@ -7,18 +7,31 @@ License:	GPL v2
 Group:		Applications/System
 Source0:	https://ftp.denx.de/pub/u-boot/u-boot-%{version}.tar.bz2
 # Source0-md5:	f1392080facf59dd2c34096a5fd95d4c
+Source1:	https://github.com/hardkernel/u-boot/archive/travis/odroidc4-189/odroid-189.tar.gz
+# Source1-md5:	dd117b6180ad5c9abb3303b31e57e7b4
 Patch0:		rpi-Enable-using-the-DT-provided-by-the-Raspberry-Pi.patch
 Patch1:		%{name}-pbp_usb_hang.patch
 Patch2:		rk3399-emmc.patch
+Patch3:		hardkernel-uboot-gcc5.patch
+Patch4:		hardkernel-uboot-werror.patch
+Patch5:		hardkernel-uboot-arm_cross.patch
+Patch6:		hardkernel-uboot-no_stdint.patch
+Patch7:		hardkernel-uboot-x86_64_bin.patch
+Patch8:		hardkernel-uboot-acs.patch
+Patch9:		hardkernel-uboot-uboot_payload.patch
 URL:		https://www.denx.de/wiki/U-Boot
-%ifarch aarch64
-BuildRequires:	arm-trusted-firmware-armv8
-%endif
 BuildRequires:	bison
 BuildRequires:	dtc
 BuildRequires:	flex
 BuildRequires:	openssl-devel
 BuildRequires:	rpmbuild(macros) >= 2.007
+%ifarch aarch64
+BuildRequires:	arm-trusted-firmware-armv8
+BuildRequires:	box64
+BuildRequires:	crossarm-gcc
+BuildRequires:	qemu-user
+BuildConflicts:	libfdt-devel
+%endif
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		common_configs	tools-only
@@ -30,7 +43,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		arch_configs	rpi_2
 %endif
 %ifarch aarch64
-%define		arch_configs	pinebook-pro-rk3399
+%define		arch_configs	odroid-n2 pinebook-pro-rk3399
 %endif
 
 %define		configs %{common_configs} %{?arch_configs}
@@ -48,6 +61,17 @@ including PPC, ARM, AVR32, MIPS, x86, 68k, Nios, and MicroBlaze.
 Das U-Boot (Universal Bootloader lub "łódź podwodna" po niemiecku) to
 bootloader dla wielu różnych architektur komputerów, w tym PPC, ARM,
 AVR32, MIPS, x86, 68k, Nios i MicroBlaze.
+
+%package image-odroid-n2
+Summary:	U-Boot firmware images for Odroid N2/N2+
+Summary(pl.UTF-8):	Obrazy firmware'u U-Boot dla urządzeń Odroid N2/N2+
+Group:		Applications/System
+
+%description image-odroid-n2
+U-Boot firmware images for Odroid N2/N2+.
+
+%description image-odroid-n2 -l pl.UTF-8
+Obrazy firmware'u U-Boot dla urządzeń Odroid N2/N2+.
 
 %package image-pinebook-pro
 Summary:	U-Boot firmware images for Pinebook Pro
@@ -118,6 +142,18 @@ czasie utworzenia, sumach kontrolnych CRC32 itp.
 %ifarch aarch64
 %patch1 -p1
 %patch2 -p1
+install -d build/hardkernel-uboot-odroid
+tar xf %{SOURCE1} -C build/hardkernel-uboot-odroid
+mv build/hardkernel-uboot-odroid/u-boot*/* build/hardkernel-uboot-odroid
+cd build/hardkernel-uboot-odroid
+%patch3 -p1
+%patch4 -p1
+%patch5 -p1
+%patch6 -p1
+%patch7 -p1
+%patch8 -p1
+%patch9 -p1
+cd ../..
 %endif
 
 %build
@@ -144,6 +180,19 @@ for config in %configs; do
 		V=1 \
 		O=build/$config
 done
+%ifarch aarch64
+cd build/hardkernel-uboot-odroid
+%{__make} odroidn2_defconfig \
+	V=1
+%{__make} \
+	CROSS_COMPILE= \
+	ARM_CROSS_COMPILE=arm-linux-gnueabi- \
+	UBOOT_PAYLOAD=$(pwd)/../odroid-n2/u-boot.bin \
+	X86_64_DYNAMIC_WRAPPER=/usr/bin/box64 \
+	X86_64_STATIC_WRAPPER=/usr/bin/qemu-x86_64 \
+	V=1
+cd ../..
+%endif
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -155,6 +204,9 @@ for config in %configs; do
 	elif echo ' %rk3399_configs ' | grep -q " $config "; then
 		install -d $RPM_BUILD_ROOT%{imagedir}/$config
 		cp -p build/$config/{idbloader.img,u-boot.itb} $RPM_BUILD_ROOT%{imagedir}/$config
+	elif [ $config = "odroid-n2" ]; then
+		install -d $RPM_BUILD_ROOT%{imagedir}/$config
+		cp -p build/hardkernel-uboot-odroid/sd_fuse/u-boot.bin $RPM_BUILD_ROOT%{imagedir}/$config
 	else
 		install -d $RPM_BUILD_ROOT%{imagedir}/$config
 		cp -p build/$config/u-boot.bin $RPM_BUILD_ROOT%{imagedir}/$config
@@ -170,6 +222,10 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{imagedir}
 
 %ifarch aarch64
+%files image-odroid-n2
+%defattr(644,root,root,755)
+%{imagedir}/odroid-n2
+
 %files image-pinebook-pro
 %defattr(644,root,root,755)
 %{imagedir}/pinebook-pro-rk3399

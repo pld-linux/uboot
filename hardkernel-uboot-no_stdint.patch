@@ -1,0 +1,10 @@
+--- hardkernel-uboot-odroid/arch/arm/cpu/armv8/g12b/firmware/scp_task/uart.c.orig	2021-11-21 15:42:14.755011547 +0100
++++ hardkernel-uboot-odroid/arch/arm/cpu/armv8/g12b/firmware/scp_task/uart.c	2021-11-21 15:42:26.868250049 +0100
+@@ -20,7 +20,6 @@
+ */
+ 
+ #include "registers.h"
+-#include <stdint.h>
+ #include "task_apis.h"
+ 
+ /* #define P_AO_UART_WFIFO                 (0xc81004c0) */

@@ -1,0 +1,28 @@
+--- hardkernel-uboot-odroid/fip/Makefile.orig	2021-03-29 03:39:35.000000000 +0200
++++ hardkernel-uboot-odroid/fip/Makefile	2021-11-21 17:32:49.696089392 +0100
+@@ -13,6 +13,7 @@
+ AML_USER_KEY := $(srctree)/$(BOARDDIR)/aml-user-key.sig
+ FIP_BL32_PROCESS =
+ DDR_FW_NAME := aml_ddr.fw
++UBOOT_PAYLOAD := $(buildtree)/u-boot.bin
+ 
+ ifeq ($(CONFIG_AML_BL33_COMPRESS_ENABLE),y)
+ BL33_COMPRESS_FLAG := --compress lz4
+@@ -71,7 +72,7 @@
+ 
+ FIP_ARGS := --bl30 $(buildtree)/fip/bl30_new.bin \
+ 	--bl31 $(buildsrc)/fip/$(SOC)/bl31.$(BL3X_SUFFIX) \
+-	--bl33 $(buildtree)/u-boot.bin
++	--bl33 $(UBOOT_PAYLOAD)
+ 
+ $(buildtree)/fip/fip.bin: FORCE
+ 	$(Q)echo Building $@...
+@@ -122,7 +123,7 @@
+ 				--input $(buildsrc)/fip/$(SOC)/bl32.$(BL3X_SUFFIX) \
+ 				--output $(buildtree)/fip/bl32.$(BL3X_SUFFIX).enc))
+ 	$(call encrypt_step, --bl3sig --type bl33 $(V3_PROCESS_FLAG) $(BL33_COMPRESS_FLAG) \
+-			--input $(buildtree)/u-boot.bin \
++			--input $(UBOOT_PAYLOAD) \
+ 			--output $(buildtree)/fip/bl33.bin.enc)
+ endif
+ 	$(call encrypt_step, --bl2sig \

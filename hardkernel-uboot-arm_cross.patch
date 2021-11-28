@@ -1,0 +1,12 @@
+--- hardkernel-uboot-odroid/arch/arm/cpu/armv8/g12b/firmware/scp_task/Makefile.orig	2021-11-21 15:35:31.551670174 +0100
++++ hardkernel-uboot-odroid/arch/arm/cpu/armv8/g12b/firmware/scp_task/Makefile	2021-11-21 15:38:26.863510869 +0100
+@@ -6,7 +6,8 @@
+ include $(buildtree)/.config
+ 
+ # Select ARMv7-m bare-metal toolchain
+-CROSS_COMPILE=arm-none-eabi-
++ARM_CROSS_COMPILE=arm-none-eabi-
++override CROSS_COMPILE=$(ARM_CROSS_COMPILE)
+ ASM=$(CROSS_COMPILE)as
+ CC=$(CROSS_COMPILE)gcc
+ CPP=$(CROSS_COMPILE)cpp

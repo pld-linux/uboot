@@ -1,0 +1,24 @@
+--- hardkernel-uboot-odroid/fip/Makefile.orig	2021-11-21 17:41:53.590511510 +0100
++++ hardkernel-uboot-odroid/fip/Makefile	2021-11-22 11:19:57.287486043 +0100
+@@ -67,7 +67,7 @@
+ endef
+ 
+ define encrypt_step
+-	$(Q)$(buildsrc)/fip/$(SOC)/aml_encrypt_$(SOC) $1
++	$(Q)$(X86_64_STATIC_WRAPPER) $(buildsrc)/fip/$(SOC)/aml_encrypt_$(SOC) $1
+ endef
+ 
+ FIP_ARGS := --bl30 $(buildtree)/fip/bl30_new.bin \
+--- hardkernel-uboot-odroid/fip/Makefile.orig	2021-03-29 03:39:35.000000000 +0200
++++ hardkernel-uboot-odroid/fip/Makefile	2021-11-21 17:27:36.244548072 +0100
+@@ -97,8 +97,8 @@
+ 	$(eval FIP_BL32_PROCESS := --bl32 $(buildsrc)/fip/$(SOC)/bl32.$(BL3X_SUFFIX).enc)
+ endif
+ endif
+-	$(Q)$(buildsrc)/fip/fip_create $(FIP_ARGS) $@
+-	$(Q)$(buildsrc)/fip/fip_create --dump $@
++	$(Q)$(X86_64_DYNAMIC_WRAPPER) $(buildsrc)/fip/fip_create $(FIP_ARGS) $@
++	$(Q)$(X86_64_DYNAMIC_WRAPPER) $(buildsrc)/fip/fip_create --dump $@
+ 
+ 	# build final bootloader
+ 	$(Q)cat $(buildtree)/fip/bl2_new.bin $(buildtree)/fip/fip.bin > $(buildtree)/fip/boot_new.bin

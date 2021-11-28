@@ -1,0 +1,14 @@
+--- hardkernel-uboot-odroid/include/linux/compiler-gcc.h.orig	2021-03-29 03:39:35.000000000 +0200
++++ hardkernel-uboot-odroid/include/linux/compiler-gcc.h	2021-11-21 15:25:04.044889807 +0100
+@@ -111,7 +111,11 @@
+ #define __gcc_header(x) #x
+ #define _gcc_header(x) __gcc_header(linux/compiler-gcc##x.h)
+ #define gcc_header(x) _gcc_header(x)
++#if __GNUC__ >= 4
++#include gcc_header(4)
++#else
+ #include gcc_header(__GNUC__)
++#endif
+ 
+ #if !defined(__noclone)
+ #define __noclone	/* not needed */
