@@ -66,6 +66,7 @@ AVR32, MIPS, x86, 68k, Nios i MicroBlaze.
 Summary:	U-Boot firmware images for Odroid N2/N2+
 Summary(pl.UTF-8):	Obrazy firmware'u U-Boot dla urządzeń Odroid N2/N2+
 Group:		Applications/System
+Requires:	%{name} = %{version}-%{release}
 
 %description image-odroid-n2
 U-Boot firmware images for Odroid N2/N2+.
@@ -77,6 +78,7 @@ Obrazy firmware'u U-Boot dla urządzeń Odroid N2/N2+.
 Summary:	U-Boot firmware images for Pinebook Pro
 Summary(pl.UTF-8):	Obrazy firmware'u U-Boot dla urządzeń Pinebook Pro
 Group:		Applications/System
+Requires:	%{name} = %{version}-%{release}
 
 %description image-pinebook-pro
 U-Boot firmware images for Pinebook Pro.
@@ -88,6 +90,7 @@ Obrazy firmware'u U-Boot dla urządzeń Pinebook Pro.
 Summary:	U-Boot firmware image for Raspberry Pi 2
 Summary(pl.UTF-8):	Obrazy firmware'u U-Boot dla urządzeń Raspberry Pi 2
 Group:		Applications/System
+Requires:	%{name} = %{version}-%{release}
 
 %description image-raspberry-pi-2
 U-Boot firmware image for Raspberry Pi 2.
@@ -99,6 +102,7 @@ Obrazy firmware'u U-Boot dla urządzeń Raspberry Pi 2.
 Summary:	U-Boot firmware image for Raspberry Pi Zero
 Summary(pl.UTF-8):	Obrazy firmware'u U-Boot dla urządzeń Raspberry Pi Zero
 Group:		Applications/System
+Requires:	%{name} = %{version}-%{release}
 
 %description image-raspberry-pi-zero
 U-Boot firmware image for Raspberry Pi Zero.
