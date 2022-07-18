@@ -23,6 +23,8 @@ URL:		https://www.denx.de/wiki/U-Boot
 BuildRequires:	bison
 BuildRequires:	dtc
 BuildRequires:	flex
+BuildRequires:	gnutls-devel
+BuildRequires:	libuuid-devel
 BuildRequires:	openssl-devel
 BuildRequires:	rpmbuild(macros) >= 2.007
 %ifarch aarch64
