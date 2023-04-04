@@ -1,17 +1,17 @@
 Summary:	Das U-Boot -- the Universal Boot Loader
 Summary(pl.UTF-8):	Das U-Boot - uniwersalny bootloader
 Name:		uboot
-Version:	2022.04
+Version:	2023.04
 Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	https://ftp.denx.de/pub/u-boot/u-boot-%{version}.tar.bz2
-# Source0-md5:	a5a70f6c723d2601da7ea93ae95642f9
+# Source0-md5:	b90cb4a3b8f02f18872197b052222d19
 Source1:	https://github.com/hardkernel/u-boot/archive/travis/odroidc4-189/odroid-189.tar.gz
 # Source1-md5:	dd117b6180ad5c9abb3303b31e57e7b4
 Patch0:		rpi-Enable-using-the-DT-provided-by-the-Raspberry-Pi.patch
-Patch1:		%{name}-pbp_usb_hang.patch
-Patch2:		rk3399-emmc.patch
+Patch1:		rk3399-emmc.patch
+Patch2:		odroid-n2-binutils-2.39.patch
 Patch3:		hardkernel-uboot-gcc5.patch
 Patch4:		hardkernel-uboot-werror.patch
 Patch5:		hardkernel-uboot-arm_cross.patch
@@ -26,6 +26,8 @@ BuildRequires:	flex
 BuildRequires:	gnutls-devel
 BuildRequires:	libuuid-devel
 BuildRequires:	openssl-devel
+BuildRequires:	python3-elftools
+BuildRequires:	python3-libfdt
 BuildRequires:	rpmbuild(macros) >= 2.007
 %ifarch aarch64
 BuildRequires:	arm-trusted-firmware-armv8
@@ -147,11 +149,11 @@ czasie utworzenia, sumach kontrolnych CRC32 itp.
 %endif
 %ifarch aarch64
 %patch1 -p1
-%patch2 -p1
 install -d build/hardkernel-uboot-odroid
 tar xf %{SOURCE1} -C build/hardkernel-uboot-odroid
 mv build/hardkernel-uboot-odroid/u-boot*/* build/hardkernel-uboot-odroid
 cd build/hardkernel-uboot-odroid
+%patch2 -p1
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
@@ -180,11 +182,13 @@ for config in %configs; do
 		$(test "$config" = "tools-only" && echo tools-only) \
 		CC="%{__cc}" \
 		HOSTCC="%{__cc}" \
+		DTC=/usr/bin/dtc \
 		STRIP=: \
 		HOSTCFLAGS="%{rpmcflags}" \
 		HOSTLDFLAGS="%{rpmldflags}" \
 		V=1 \
-		O=build/$config
+		O=build/$config \
+		BL31=bl31.elf
 done
 %ifarch aarch64
 cd build/hardkernel-uboot-odroid

@@ -1,0 +1,11 @@
+--- hardkernel-uboot-odroid/arch/arm/cpu/armv8/g12b/firmware/acs/Makefile.orig	2023-04-04 19:38:31.295261254 +0200
++++ hardkernel-uboot-odroid/arch/arm/cpu/armv8/g12b/firmware/acs/Makefile	2023-04-04 19:57:41.007977591 +0200
+@@ -187,7 +187,7 @@
+ CFLAGS			+= 	${FIRMWARE_CPPFLAGS}
+ CFLAGS			+= 	-Wno-unused
+ 
+-LDFLAGS			+=	--fatal-warnings -O1
++LDFLAGS			+=	-O1
+ LDFLAGS			+=	--gc-sections
+ 
+ CC			:=	${CROSS_COMPILE}gcc
