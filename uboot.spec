@@ -25,8 +25,11 @@ BuildRequires:	flex
 BuildRequires:	gnutls-devel
 BuildRequires:	libuuid-devel
 BuildRequires:	openssl-devel
+BuildRequires:	python3
 BuildRequires:	python3-elftools
 BuildRequires:	python3-libfdt
+BuildRequires:	python3-modules
+BuildRequires:	python3-setuptools
 BuildRequires:	rpmbuild(macros) >= 2.007
 %ifarch aarch64
 BuildRequires:	arm-trusted-firmware-armv8
