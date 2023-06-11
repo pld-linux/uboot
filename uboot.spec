@@ -283,13 +283,13 @@ rm -rf $RPM_BUILD_ROOT
 %ifarch %{ix86}
 %files image-qemu
 %defattr(644,root,root,755)
-%{imagedir}/qemu_x86
+%{imagedir}/qemu-x86
 %endif
 
 %ifarch %{x8664}
 %files image-qemu
 %defattr(644,root,root,755)
-%{imagedir}/qemu_x86_64
+%{imagedir}/qemu-x86_64
 %endif
 
 %files mkimage
