@@ -52,10 +52,10 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		arch_configs	odroid-n2 pinebook-pro-rk3399 qemu_arm64
 %endif
 %ifarch %{ix86}
-%define		arch_configs	qemu_x86
+%define		arch_configs	qemu-x86
 %endif
 %ifarch %{x8664}
-%define		arch_configs	qemu_x86_64
+%define		arch_configs	qemu-x86_64
 %endif
 
 %define		configs %{common_configs} %{?arch_configs}
