@@ -2,7 +2,7 @@ Summary:	Das U-Boot -- the Universal Boot Loader
 Summary(pl.UTF-8):	Das U-Boot - uniwersalny bootloader
 Name:		uboot
 Version:	2023.04
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Applications/System
 Source0:	https://ftp.denx.de/pub/u-boot/u-boot-%{version}.tar.bz2
@@ -43,13 +43,19 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		common_configs	tools-only
 
 %ifarch %{armv6}
-%define		arch_configs	rpi_0_w rpi_2
+%define		arch_configs	qemu_arm rpi_0_w rpi_2
 %endif
 %ifarch %{armv7}
-%define		arch_configs	rpi_2
+%define		arch_configs	qemu_arm rpi_2
 %endif
 %ifarch aarch64
-%define		arch_configs	odroid-n2 pinebook-pro-rk3399
+%define		arch_configs	odroid-n2 pinebook-pro-rk3399 qemu_arm64
+%endif
+%ifarch %{ix86}
+%define		arch_configs	qemu_x86
+%endif
+%ifarch %{x8664}
+%define		arch_configs	qemu_x86_64
 %endif
 
 %define		configs %{common_configs} %{?arch_configs}
@@ -91,6 +97,18 @@ U-Boot firmware images for Pinebook Pro.
 
 %description image-pinebook-pro -l pl.UTF-8
 Obrazy firmware'u U-Boot dla urządzeń Pinebook Pro.
+
+%package image-qemu
+Summary:	U-Boot firmware images for QEMU
+Summary(pl.UTF-8):	Obrazy firmware'u U-Boot dla QEMU
+Group:		Applications/System
+Requires:	%{name} = %{version}-%{release}
+
+%description image-qemu
+U-Boot firmware images for QEMU.
+
+%description image-qemu -l pl.UTF-8
+Obrazy firmware'u U-Boot dla QEMU.
 
 %package image-raspberry-pi-2
 Summary:	U-Boot firmware image for Raspberry Pi 2
@@ -240,9 +258,17 @@ rm -rf $RPM_BUILD_ROOT
 %files image-pinebook-pro
 %defattr(644,root,root,755)
 %{imagedir}/pinebook-pro-rk3399
+
+%files image-qemu
+%defattr(644,root,root,755)
+%{imagedir}/qemu_arm64
 %endif
 
 %ifarch %{armv6} %{armv7}
+%files image-qemu
+%defattr(644,root,root,755)
+%{imagedir}/qemu_arm
+
 %files image-raspberry-pi-2
 %defattr(644,root,root,755)
 %{imagedir}/rpi_2
@@ -252,6 +278,18 @@ rm -rf $RPM_BUILD_ROOT
 %files image-raspberry-pi-zero
 %defattr(644,root,root,755)
 %{imagedir}/rpi_0_w
+%endif
+
+%ifarch %{ix86}
+%files image-qemu
+%defattr(644,root,root,755)
+%{imagedir}/qemu_x86
+%endif
+
+%ifarch %{x8664}
+%files image-qemu
+%defattr(644,root,root,755)
+%{imagedir}/qemu_x86_64
 %endif
 
 %files mkimage
