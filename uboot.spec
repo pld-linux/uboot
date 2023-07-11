@@ -1,12 +1,12 @@
 Summary:	Das U-Boot -- the Universal Boot Loader
 Summary(pl.UTF-8):	Das U-Boot - uniwersalny bootloader
 Name:		uboot
-Version:	2023.07
+Version:	2023.07.02
 Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	https://ftp.denx.de/pub/u-boot/u-boot-%{version}.tar.bz2
-# Source0-md5:	db702217d416d19ff416a2b2f39347a4
+# Source0-md5:	001a0c1ffedd9a6e8d7af915d4d68b02
 Source1:	https://github.com/hardkernel/u-boot/archive/travis/odroidc4-189/odroid-189.tar.gz
 # Source1-md5:	dd117b6180ad5c9abb3303b31e57e7b4
 Patch0:		rpi-Enable-using-the-DT-provided-by-the-Raspberry-Pi.patch
