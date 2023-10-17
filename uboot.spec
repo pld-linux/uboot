@@ -2,7 +2,7 @@ Summary:	Das U-Boot -- the Universal Boot Loader
 Summary(pl.UTF-8):	Das U-Boot - uniwersalny bootloader
 Name:		uboot
 Version:	2023.07.02
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Applications/System
 Source0:	https://ftp.denx.de/pub/u-boot/u-boot-%{version}.tar.bz2
@@ -49,7 +49,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		arch_configs	qemu_arm rpi_2
 %endif
 %ifarch aarch64
-%define		arch_configs	odroid-n2 pinebook-pro-rk3399 qemu_arm64
+%define		arch_configs	odroid-n2 pinebook-pro-rk3399 qemu_arm64 rpi_arm64
 %endif
 %ifarch %{ix86}
 %define		arch_configs	qemu-x86
@@ -109,6 +109,18 @@ U-Boot firmware images for QEMU.
 
 %description image-qemu -l pl.UTF-8
 Obrazy firmware'u U-Boot dla QEMU.
+
+%package image-raspberry-pi-arm64
+Summary:	U-Boot firmware image for 64-bit Raspberry Pi boards
+Summary(pl.UTF-8):	Obrazy firmware'u U-Boot dla 64-bitowych urządzeń Raspberry Pi
+Group:		Applications/System
+Requires:	%{name} = %{version}-%{release}
+
+%description image-raspberry-pi-arm64
+U-Boot firmware image for 64-bit Raspberry Pi boards.
+
+%description image-raspberry-pi-arm64 -l pl.UTF-8
+Obrazy firmware'u U-Boot dla 64-bitowych urządzeń Raspberry Pi
 
 %package image-raspberry-pi-2
 Summary:	U-Boot firmware image for Raspberry Pi 2
@@ -262,6 +274,10 @@ rm -rf $RPM_BUILD_ROOT
 %files image-qemu
 %defattr(644,root,root,755)
 %{imagedir}/qemu_arm64
+
+%files image-raspberry-pi-arm64
+%defattr(644,root,root,755)
+%{imagedir}/rpi_arm64
 %endif
 
 %ifarch %{armv6} %{armv7}
