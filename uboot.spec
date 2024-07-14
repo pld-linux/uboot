@@ -1,15 +1,14 @@
 Summary:	Das U-Boot -- the Universal Boot Loader
 Summary(pl.UTF-8):	Das U-Boot - uniwersalny bootloader
 Name:		uboot
-Version:	2024.01
+Version:	2024.07
 Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	https://ftp.denx.de/pub/u-boot/u-boot-%{version}.tar.bz2
-# Source0-md5:	a020c6e24bfeb19a455c920a48ab9976
+# Source0-md5:	e19c1180d996369d730918fc94f903c0
 Source1:	https://github.com/hardkernel/u-boot/archive/travis/odroidc4-189/odroid-189.tar.gz
 # Source1-md5:	dd117b6180ad5c9abb3303b31e57e7b4
-Patch0:		rpi-Enable-using-the-DT-provided-by-the-Raspberry-Pi.patch
 Patch2:		odroid-n2-binutils-2.39.patch
 Patch3:		hardkernel-uboot-gcc5.patch
 Patch4:		hardkernel-uboot-werror.patch
@@ -18,6 +17,7 @@ Patch6:		hardkernel-uboot-no_stdint.patch
 Patch7:		hardkernel-uboot-x86_64_bin.patch
 Patch8:		hardkernel-uboot-acs.patch
 Patch9:		hardkernel-uboot-uboot_payload.patch
+Patch10:	hardkernel-uboot-gcc14.patch
 URL:		https://www.denx.de/wiki/U-Boot
 BuildRequires:	bison
 BuildRequires:	dtc
@@ -176,9 +176,6 @@ czasie utworzenia, sumach kontrolnych CRC32 itp.
 
 %prep
 %setup -q -n u-boot-%{version}
-%ifarch %{arm} aarch64
-%patch0 -p1
-%endif
 %ifarch aarch64
 install -d build/hardkernel-uboot-odroid
 tar xf %{SOURCE1} -C build/hardkernel-uboot-odroid
@@ -192,6 +189,7 @@ cd build/hardkernel-uboot-odroid
 %patch7 -p1
 %patch8 -p1
 %patch9 -p1
+%patch10 -p1
 cd ../..
 %endif
 

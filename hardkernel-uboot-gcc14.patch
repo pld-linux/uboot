@@ -1,0 +1,21 @@
+diff -ur hardkernel-uboot-odroid.orig/common/bootm.c hardkernel-uboot-odroid/common/bootm.c
+--- hardkernel-uboot-odroid.orig/common/bootm.c	2024-07-14 13:02:16.210258070 +0200
++++ hardkernel-uboot-odroid/common/bootm.c	2024-07-14 13:05:23.621487933 +0200
+@@ -330,7 +330,7 @@
+ #ifdef CONFIG_OF_LIBFDT_OVERLAY
+ static int get_fdto_totalsize(u32 *tz)
+ {
+-	unsigned long long dtbo_mem_addr = NULL;
++	unsigned long long dtbo_mem_addr;
+ 	int ret;
+ 
+ 	ret = read_fdto_partition();
+@@ -347,7 +347,7 @@
+ #ifdef CONFIG_OF_LIBFDT_OVERLAY
+ static int do_fdt_overlay(void)
+ {
+-	unsigned long long dtbo_mem_addr = NULL;
++	unsigned long long dtbo_mem_addr;
+ 	int                dtbo_num = 0;
+ 	int                i;
+ 	char               cmd[128];
