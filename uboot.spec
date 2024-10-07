@@ -1,12 +1,12 @@
 Summary:	Das U-Boot -- the Universal Boot Loader
 Summary(pl.UTF-8):	Das U-Boot - uniwersalny bootloader
 Name:		uboot
-Version:	2024.07
+Version:	2024.10
 Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	https://ftp.denx.de/pub/u-boot/u-boot-%{version}.tar.bz2
-# Source0-md5:	e19c1180d996369d730918fc94f903c0
+# Source0-md5:	d83e3cf2e605e5647b6bd93545484d2b
 Source1:	https://github.com/hardkernel/u-boot/archive/travis/odroidc4-189/odroid-189.tar.gz
 # Source1-md5:	dd117b6180ad5c9abb3303b31e57e7b4
 Patch2:		odroid-n2-binutils-2.39.patch
