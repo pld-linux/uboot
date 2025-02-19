@@ -181,15 +181,15 @@ install -d build/hardkernel-uboot-odroid
 tar xf %{SOURCE1} -C build/hardkernel-uboot-odroid
 mv build/hardkernel-uboot-odroid/u-boot*/* build/hardkernel-uboot-odroid
 cd build/hardkernel-uboot-odroid
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
-%patch6 -p1
-%patch7 -p1
-%patch8 -p1
-%patch9 -p1
-%patch10 -p1
+%patch -P2 -p1
+%patch -P3 -p1
+%patch -P4 -p1
+%patch -P5 -p1
+%patch -P6 -p1
+%patch -P7 -p1
+%patch -P8 -p1
+%patch -P9 -p1
+%patch -P10 -p1
 cd ../..
 %endif
 
