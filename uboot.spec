@@ -2,7 +2,7 @@ Summary:	Das U-Boot -- the Universal Boot Loader
 Summary(pl.UTF-8):	Das U-Boot - uniwersalny bootloader
 Name:		uboot
 Version:	2025.01
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Applications/System
 Source0:	https://ftp.denx.de/pub/u-boot/u-boot-%{version}.tar.bz2
@@ -32,10 +32,11 @@ BuildRequires:	python3-modules
 BuildRequires:	python3-setuptools
 BuildRequires:	rpmbuild(macros) >= 2.007
 %ifarch aarch64
-BuildRequires:	arm-trusted-firmware-armv8
+BuildRequires:	arm-trusted-firmware-armv8 >= 2.12.0-2
 BuildRequires:	box64
 BuildRequires:	crossarm-gcc
 BuildRequires:	qemu-user
+BuildRequires:	rockchip-firmware
 BuildConflicts:	libfdt-devel
 %endif
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -49,7 +50,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		arch_configs	qemu_arm rpi_2
 %endif
 %ifarch aarch64
-%define		arch_configs	odroid-n2 pinebook-pro-rk3399 qemu_arm64 rpi_arm64
+%define		arch_configs	odroid-n2 pinebook-pro-rk3399 qemu_arm64 rock5b-rk3588 rpi_arm64
 %endif
 %ifarch %{ix86}
 %define		arch_configs	qemu-x86
@@ -61,6 +62,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		configs %{common_configs} %{?arch_configs}
 
 %define		rk3399_configs pinebook-pro-rk3399
+%define		rk3588_configs rock5b-rk3588
 
 %define		imagedir	%{_datadir}/uboot
 
@@ -87,16 +89,16 @@ U-Boot firmware images for Odroid N2/N2+.
 Obrazy firmware'u U-Boot dla urządzeń Odroid N2/N2+.
 
 %package image-pinebook-pro
-Summary:	U-Boot firmware images for Pinebook Pro
-Summary(pl.UTF-8):	Obrazy firmware'u U-Boot dla urządzeń Pinebook Pro
+Summary:	U-Boot firmware images for Pine64 Pinebook Pro
+Summary(pl.UTF-8):	Obrazy firmware'u U-Boot dla urządzeń Pine64 Pinebook Pro
 Group:		Applications/System
 Requires:	%{name} = %{version}-%{release}
 
 %description image-pinebook-pro
-U-Boot firmware images for Pinebook Pro.
+U-Boot firmware images for Pine64 Pinebook Pro.
 
 %description image-pinebook-pro -l pl.UTF-8
-Obrazy firmware'u U-Boot dla urządzeń Pinebook Pro.
+Obrazy firmware'u U-Boot dla urządzeń Pine64 Pinebook Pro.
 
 %package image-qemu
 Summary:	U-Boot firmware images for QEMU
@@ -145,6 +147,18 @@ U-Boot firmware image for Raspberry Pi Zero.
 
 %description image-raspberry-pi-zero -l pl.UTF-8
 Obrazy firmware'u U-Boot dla urządzeń Raspberry Pi Zero.
+
+%package image-rock5b
+Summary:	U-Boot firmware images for Radxa Rock 5B
+Summary(pl.UTF-8):	Obrazy firmware'u U-Boot dla urządzeń Radxa Rock 5B
+Group:		Applications/System
+Requires:	%{name} = %{version}-%{release}
+
+%description image-rock5b
+U-Boot firmware images for Radxa Rock 5B.
+
+%description image-rock5b -l pl.UTF-8
+Obrazy firmware'u U-Boot dla urządzeń Radxa Rock 5B.
 
 %package mkimage
 Summary:	Generate kernel image for U-Boot
@@ -198,6 +212,10 @@ for config in %configs; do
 	if echo ' %rk3399_configs ' | grep -q " $config "; then
 		mkdir -p build/$config
 		cp -p /usr/share/arm-trusted-firmware/rk3399/* build/$config
+	elif echo ' %rk3588_configs ' | grep -q " $config "; then
+		mkdir -p build/$config
+		cp -p /usr/share/arm-trusted-firmware/rk3588/* build/$config
+		export ROCKCHIP_TPL=/usr/share/rockchip-firmware/bin/rk35/rk3588_ddr_lp4_2112MHz_lp5_2400MHz.bin
 	fi
 	%{__make} ${config}_defconfig \
 		CC="%{__cc}" \
@@ -240,7 +258,7 @@ install -d $RPM_BUILD_ROOT{%{_bindir},%{imagedir}}
 for config in %configs; do
 	if [ "$config" = "tools-only" ]; then
 		install build/$config/tools/mkimage $RPM_BUILD_ROOT%{_bindir}
-	elif echo ' %rk3399_configs ' | grep -q " $config "; then
+	elif echo ' %rk3399_configs %rk3588_configs ' | grep -q " $config "; then
 		install -d $RPM_BUILD_ROOT%{imagedir}/$config
 		cp -p build/$config/{idbloader.img,u-boot.itb} $RPM_BUILD_ROOT%{imagedir}/$config
 	elif [ $config = "odroid-n2" ]; then
@@ -276,6 +294,10 @@ rm -rf $RPM_BUILD_ROOT
 %files image-raspberry-pi-arm64
 %defattr(644,root,root,755)
 %{imagedir}/rpi_arm64
+
+%files image-rock5b
+%defattr(644,root,root,755)
+%{imagedir}/rock5b-rk3588
 %endif
 
 %ifarch %{armv6} %{armv7}
