@@ -46,10 +46,10 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		common_configs	tools-only
 
 %ifarch %{armv6}
-%define		arch_configs	qemu_arm rpi_0_w rpi_2
+%define		arch_configs	qemu_arm rpi_0_w rpi_2 turris_omnia
 %endif
 %ifarch %{armv7}
-%define		arch_configs	qemu_arm rpi_2
+%define		arch_configs	qemu_arm rpi_2 turris_omnia
 %endif
 %ifarch aarch64
 %define		arch_configs	odroid-n2 pinebook-pro-rk3399 qemu_arm64 rock5b-rk3588 rpi_arm64
@@ -162,6 +162,18 @@ U-Boot firmware images for Radxa Rock 5B.
 %description image-rock5b -l pl.UTF-8
 Obrazy firmware'u U-Boot dla urządzeń Radxa Rock 5B.
 
+%package image-turris-omnia
+Summary:	U-Boot firmware images for Turris Omnia
+Summary(pl.UTF-8):	Obrazy firmware'u U-Boot dla urządzeń Turris Omnia
+Group:		Applications/System
+Requires:	%{name} = %{version}-%{release}
+
+%description image-turris-omnia
+U-Boot firmware images for Turris Omnia.
+
+%description image-turris-omnia -l pl.UTF-8
+Obrazy firmware'u U-Boot dla urządzeń Turris Omnia.
+
 %package tools
 Summary:	Tools for manipulating various U-Boot image formats
 Summary(pl.UTF-8):	Narzędzia do manipulacji różnymi formatami obrazów dla U-Boota
@@ -256,6 +268,9 @@ for config in %configs; do
 	elif [ $config = "odroid-n2" ]; then
 		install -d $RPM_BUILD_ROOT%{imagedir}/$config
 		cp -p build/hardkernel-uboot-odroid/sd_fuse/u-boot.bin $RPM_BUILD_ROOT%{imagedir}/$config
+	elif [ $config = "turris_omnia" ]; then
+		install -d $RPM_BUILD_ROOT%{imagedir}/$config
+		cp -p build/$config/u-boot-with-spl.kwb $RPM_BUILD_ROOT%{imagedir}/$config
 	else
 		install -d $RPM_BUILD_ROOT%{imagedir}/$config
 		cp -p build/$config/u-boot.bin $RPM_BUILD_ROOT%{imagedir}/$config
@@ -300,6 +315,10 @@ rm -rf $RPM_BUILD_ROOT
 %files image-raspberry-pi-2
 %defattr(644,root,root,755)
 %{imagedir}/rpi_2
+
+%files image-turris-omnia
+%defattr(644,root,root,755)
+%{imagedir}/turris_omnia
 %endif
 
 %ifarch %{armv6}
