@@ -19,6 +19,7 @@ Patch8:		hardkernel-uboot-acs.patch
 Patch9:		hardkernel-uboot-uboot_payload.patch
 Patch10:	hardkernel-uboot-gcc14.patch
 URL:		https://www.denx.de/wiki/U-Boot
+BuildRequires:	bc
 BuildRequires:	bison
 BuildRequires:	dtc
 BuildRequires:	flex
