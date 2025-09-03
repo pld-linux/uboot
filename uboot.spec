@@ -2,7 +2,7 @@ Summary:	Das U-Boot -- the Universal Boot Loader
 Summary(pl.UTF-8):	Das U-Boot - uniwersalny bootloader
 Name:		uboot
 Version:	2025.07
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Applications/System
 Source0:	https://ftp.denx.de/pub/u-boot/u-boot-%{version}.tar.bz2
@@ -160,33 +160,17 @@ U-Boot firmware images for Radxa Rock 5B.
 %description image-rock5b -l pl.UTF-8
 Obrazy firmware'u U-Boot dla urządzeń Radxa Rock 5B.
 
-%package mkimage
-Summary:	Generate kernel image for U-Boot
-Summary(pl.UTF-8):	Generowanie obrazu jądra dla U-Boota
+%package tools
+Summary:	Tools for manipulating various U-Boot image formats
+Summary(pl.UTF-8):	Narzędzia do manipulacji różnymi formatami obrazów dla U-Boota
 Group:		Applications/System
+Obsoletes:	uboot-mkimage < 2025.07-2
 
-%description mkimage
-This package contains the mkimage utility, which encapsulates a
-compressed "uImage" Linux kernel image with header information, CRC32
-checksum, etc., for use with the U-Boot bootloader.
+%description tools
+Tools for manipulating various U-Boot image formats.
 
-mkimage can also be used to create ramdisk images for use with U-Boot,
-either separated from the Linux kernel image, or combined into one
-file. mkimage encapsulates the images with a 64 byte header containing
-information about target architecture, operating system, image type,
-compression method, entry points, time stamp, CRC32 checksums, etc.
-
-%description mkimage -l pl.UTF-8
-Ten pakiet zawiera narzędzie mkimage, łączące skompresowany obraz
-jądra Linuksa "uImage" w nagłówkiem, sumą kontrolną CRC32 itp. do
-wykorzystania przez bootloader U-Boot.
-
-mkimage może być używane także do tworzenia obrazów ramdysków do
-wykorzystania przez U-Boota - osobnych w stosunku do obrazu jądra lub
-połączonych w jeden plik. mkimage obudowuje obrazy w 64-bajtowy
-nagłówek zawierający informacje o architekturze docelowej, systemie
-operacyjnym, rodzaju obrazu, metodzie kompresji, punktach wejściowych,
-czasie utworzenia, sumach kontrolnych CRC32 itp.
+%description tools -l pl.UTF-8
+Narzędzia do manipulacji różnymi formatami obrazów dla U-Boota.
 
 %prep
 %setup -q -n u-boot-%{version}
@@ -226,7 +210,7 @@ for config in %configs; do
 		V=1 \
 		O=build/$config
 	%{__make} \
-		$(test "$config" = "tools-only" && echo tools-only) \
+		$(test "$config" = "tools-only" && echo tools-all) \
 		CC="%{__cc}" \
 		HOSTCC="%{__cc}" \
 		DTC=/usr/bin/dtc \
@@ -253,11 +237,17 @@ cd ../..
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_bindir},%{imagedir}}
+install -d $RPM_BUILD_ROOT{%{_bindir},%{_mandir}/man1,%{imagedir}}
 
 for config in %configs; do
 	if [ "$config" = "tools-only" ]; then
-		install build/$config/tools/mkimage $RPM_BUILD_ROOT%{_bindir}
+		find build/$config/tools -type f -executable -exec install {} $RPM_BUILD_ROOT%{_bindir} \;
+		for bin in $RPM_BUILD_ROOT%{_bindir}/*; do
+			name=$(basename $bin)
+			if [ -e doc/$name.1 ]; then
+				install doc/$name.1 $RPM_BUILD_ROOT%{_mandir}/man1
+			fi
+		done
 	elif echo ' %rk3399_configs %rk3588_configs ' | grep -q " $config "; then
 		install -d $RPM_BUILD_ROOT%{imagedir}/$config
 		cp -p build/$config/{idbloader.img,u-boot.itb} $RPM_BUILD_ROOT%{imagedir}/$config
@@ -328,6 +318,33 @@ rm -rf $RPM_BUILD_ROOT
 %{imagedir}/qemu-x86_64
 %endif
 
-%files mkimage
+%files tools
 %defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/asn1_compiler
+%attr(755,root,root) %{_bindir}/dumpimage
+%attr(755,root,root) %{_bindir}/fdt_add_pubkey
+%attr(755,root,root) %{_bindir}/fdtgrep
+%attr(755,root,root) %{_bindir}/fit_check_sign
+%attr(755,root,root) %{_bindir}/fit_info
+%attr(755,root,root) %{_bindir}/fw_printenv
+%attr(755,root,root) %{_bindir}/gdbcont
+%attr(755,root,root) %{_bindir}/gdbsend
+%attr(755,root,root) %{_bindir}/gen_eth_addr
+%attr(755,root,root) %{_bindir}/gen_ethaddr_crc
+%attr(755,root,root) %{_bindir}/ifwitool
+%attr(755,root,root) %{_bindir}/img2srec
+%attr(755,root,root) %{_bindir}/kwboot
+%attr(755,root,root) %{_bindir}/mkeficapsule
+%attr(755,root,root) %{_bindir}/mkenvimage
 %attr(755,root,root) %{_bindir}/mkimage
+%attr(755,root,root) %{_bindir}/mksunxiboot
+%attr(755,root,root) %{_bindir}/ncb
+%attr(755,root,root) %{_bindir}/preload_check_sign
+%attr(755,root,root) %{_bindir}/printinitialenv
+%attr(755,root,root) %{_bindir}/proftool
+%attr(755,root,root) %{_bindir}/spl_size_limit
+%attr(755,root,root) %{_bindir}/sunxi-spl-image-builder
+%{_mandir}/man1/dumpimage.1*
+%{_mandir}/man1/kwboot.1*
+%{_mandir}/man1/mkeficapsule.1*
+%{_mandir}/man1/mkimage.1*
