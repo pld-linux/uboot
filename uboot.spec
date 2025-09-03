@@ -24,6 +24,7 @@ BuildRequires:	dtc
 BuildRequires:	flex
 BuildRequires:	gnutls-devel
 BuildRequires:	libuuid-devel
+BuildRequires:	ncurses-devel
 BuildRequires:	openssl-devel
 BuildRequires:	python3
 BuildRequires:	python3-elftools
