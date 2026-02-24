@@ -264,7 +264,7 @@ for config in %configs; do
 		done
 	elif echo ' %rk3399_configs %rk3588_configs ' | grep -q " $config "; then
 		install -d $RPM_BUILD_ROOT%{imagedir}/$config
-		cp -p build/$config/{idbloader.img,u-boot.itb} $RPM_BUILD_ROOT%{imagedir}/$config
+		cp -p build/$config/{idbloader.img,u-boot.itb,u-boot-rockchip-spi.bin} $RPM_BUILD_ROOT%{imagedir}/$config
 	elif [ $config = "odroid-n2" ]; then
 		install -d $RPM_BUILD_ROOT%{imagedir}/$config
 		cp -p build/hardkernel-uboot-odroid/sd_fuse/u-boot.bin $RPM_BUILD_ROOT%{imagedir}/$config
