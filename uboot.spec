@@ -1,3 +1,7 @@
+#
+# Conditional build:
+%bcond_without	system_dtc	# use system dtc
+
 Summary:	Das U-Boot -- the Universal Boot Loader
 Summary(pl.UTF-8):	Das U-Boot - uniwersalny bootloader
 Name:		uboot
@@ -21,7 +25,6 @@ Patch10:	hardkernel-uboot-gcc14.patch
 URL:		https://www.denx.de/wiki/U-Boot
 BuildRequires:	bc
 BuildRequires:	bison
-BuildRequires:	dtc
 BuildRequires:	flex
 BuildRequires:	gnutls-devel
 BuildRequires:	libuuid-devel
@@ -29,10 +32,17 @@ BuildRequires:	ncurses-devel
 BuildRequires:	openssl-devel
 BuildRequires:	python3
 BuildRequires:	python3-elftools
-BuildRequires:	python3-libfdt
 BuildRequires:	python3-modules
 BuildRequires:	python3-setuptools
 BuildRequires:	rpmbuild(macros) >= 2.007
+%if %{with system_dtc}
+BuildRequires:	dtc
+BuildRequires:	python3-libfdt
+%else
+BuildRequires:	python3-devel
+BuildRequires:	swig
+BuildRequires:	swig-python
+%endif
 %ifarch aarch64
 BuildRequires:	arm-trusted-firmware-armv8 >= 2.12.0-2
 BuildRequires:	box64
@@ -227,7 +237,7 @@ for config in %configs; do
 		$(test "$config" = "tools-only" && echo tools-all) \
 		CC="%{__cc}" \
 		HOSTCC="%{__cc}" \
-		DTC=/usr/bin/dtc \
+		%{?with_system_dtc:DTC=/usr/bin/dtc} \
 		STRIP=: \
 		HOSTCFLAGS="%{rpmcflags}" \
 		HOSTLDFLAGS="%{rpmldflags}" \
