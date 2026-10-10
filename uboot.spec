@@ -5,12 +5,12 @@
 Summary:	Das U-Boot -- the Universal Boot Loader
 Summary(pl.UTF-8):	Das U-Boot - uniwersalny bootloader
 Name:		uboot
-Version:	2026.07
+Version:	2026.10
 Release:	1
 License:	GPL v2
 Group:		Applications/System
-Source0:	https://ftp.denx.de/pub/u-boot/u-boot-%{version}.tar.bz2
-# Source0-md5:	336d4cb1452f2ed70da86da2d8560060
+Source0:	https://git.u-boot-project.org/u-boot/u-boot/-/archive/v%{version}/u-boot-v%{version}.tar.bz2
+# Source0-md5:	80c3b877251efed4b973ceb4dee89cb1
 Source1:	https://github.com/hardkernel/u-boot/archive/travis/odroidc4-189/odroid-189.tar.gz
 # Source1-md5:	dd117b6180ad5c9abb3303b31e57e7b4
 Patch2:		odroid-n2-binutils-2.39.patch
@@ -197,7 +197,7 @@ Tools for manipulating various U-Boot image formats.
 Narzędzia do manipulacji różnymi formatami obrazów dla U-Boota.
 
 %prep
-%setup -q -n u-boot-%{version}
+%setup -q -n u-boot-v%{version}
 %ifarch aarch64
 install -d build/hardkernel-uboot-odroid
 tar xf %{SOURCE1} -C build/hardkernel-uboot-odroid
